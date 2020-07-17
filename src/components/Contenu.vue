@@ -1,63 +1,27 @@
 <template>
   <div class="container">
-   <h1>Formulaire</h1>
+   <h1>Quoi de prevu ?</h1>
+<form action="">
 
-   <form >
-   
-   <label for="prenom"> Prenom </label>
-  <input v-on:input="toggleResult" v-model="formData.prenom" type="prenom" name="prenom" id="prenom">
-  <br>
-  <br>
-  <label for="txt"> Textarea</label>
-  <textarea v-model="formData.txt" id="txt" ></textarea>
-   
+<label for="action"></label>
+<input type="text" v-model="tache" id="action">
 
 
+<button type="submit" v-on:click.prevent="creationItem"> Crée une Tache </button>
 
-            <h3>Checkbox</h3>
-               <div>
-     <label for="fraise"> Fraise</label>
-     <input v-model="formData.checkFruits" value="fraise" type="checkbox"  id="fraise">
-
-   </div>
-
-    <div>
-     <label for="pomme"> Pomme </label>
-     <input v-model="formData.checkFruits" value="pomme" type="checkbox"  id="pomme">
-
-   </div>
-   
-    <div>
-     <label for="cerises"> Cerises</label>
-     <input v-model="formData.checkFruits" value="cerises" type="checkbox"  id="cerises">
+</form>
 
 
-        
-        <h3>Select Box </h3>
-        <select v-model="formData.select">
-          <option v-for="(pays, index) in formData.listePays " :key="index" > {{ pays }}</option>
-        </select>
 
-         
-   </div>
-    <br>
-    <button v-on:click.prevent="envoiForm" type="submit"> Envoyer les données</button>
-   <br>
-   </form>
-   
-   <br>
+<ul>
+  <li v-for="(tache, index) in tableauTaches" :key="index">
+     <item :tache="tache" :suppression="suppression"> </item>
+     </li>
+</ul>
+  
 
-   <div v-if="infoSubmit">
-      <h2>Resultat</h2>
-
-   <p>Prenom : {{ formData.prenom }}</p>
-   <p>Text : {{ formData.txt }}</p>
-          <ul>
-         <li v-for="(fruits, index) in formData.checkFruits" :key="index"> {{ fruits }} </li>
-       </ul>
-   <p>Pays : {{ formData.select}}</p>
-
-   </div>
+  
+  
 
 
 
@@ -66,31 +30,33 @@
 </template>
 <script> 
 
+import Item from './Item'
 
       export default {
-          name: 'continue',
+          name: 'Contenu',
           data: function () {
               return {
                 formData: {
-                 prenom : '',
-                 txt: '',
-                 checkFruits : [],
-                 select: '',
-                 listePays : ['CongoRDC' ,'Chine','Sénégal','USA']
+                    
                 },
-                infoSubmit: false
+                tableauTaches : ["Js", "PHP", "Python","Angular"],
+                tache: ""
+              
 
               }
                 
            },
+           components:{
+              'item': Item
+           },
            methods: {
-             envoiForm: function (){
-                this.infoSubmit = true;
-             },
-
-             toggleResult: function () {
-               this.infoSubmit = false
-             }
+              creationItem : function() {
+                this.tableauTaches.push(this.tache)
+                this.tache = ""
+              },
+              suppression : function (e) {
+                this.tableauTaches.splice(e.target.parentNode.id , 1)
+              }
            
            },
     
@@ -99,5 +65,14 @@
 
 
 </script>
+
+<style scoped>
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+</style>
 
 
